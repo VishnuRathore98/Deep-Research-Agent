@@ -1,8 +1,10 @@
 import requests
+import re
+import json
 from langchain.tools import tool
 from rich import print
 from tavily import TavilyClient
-
+import trafilatura
 from src.config import settings
 
 tavily_client = TavilyClient(api_key=settings.TAVILY_API_KEY)
@@ -35,4 +37,19 @@ def scrape_url(url: str):
 
     response = requests.get(
         url=url,
+        headers=headers,
     )
+
+    html = response.text
+
+    extracted = trafilatura.extract(
+        html,
+        include_tables=False,
+    )
+
+    if extracted and (len(extracted.strip()) > 200):
+        cleaned = re.sub(r"\s+", " ", extracted)
+        return cleaned[:5000]
+
+    # print(json.loads(response.text))
+    return "Could not get data"
