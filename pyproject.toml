@@ -15,4 +15,6 @@ dependencies = [
     "tavily>=1.1.0",
     "tavily-python>=0.8.1",
     "trafilatura>=2.2.0",
+    "langchain-openrouter>=0.2.8",
+    "langsmith>=0.12.2",
 ]
